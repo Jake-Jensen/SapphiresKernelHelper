@@ -31,6 +31,7 @@ const char *HighPerfMakeModules = "sudo make modules -j";
 int main(int argc, char *argv[])
 {
 	// Hidden command to stop segfault
+	// ! Doesn't appear to be working.
 	*argv = "nothing";
 	// Ton of helpful shit here. Command line arguments.
 	if (strcmp(argv[1], "-basic") == 0 || strcmp(argv[1], "-Basic") == 0)
@@ -114,6 +115,8 @@ int main(int argc, char *argv[])
 		std::getline(std::cin, Mode);
 		NumberOfThreads = sysconf(_SC_NPROCESSORS_ONLN);
 		std::system("clear");
+		// Workaround for mode selection failure
+		// ! Does not appear to be working
 		if (Mode == "4") {
 			CheckInput = 4;
 			if (Mode == "3") {
@@ -172,6 +175,7 @@ int main(int argc, char *argv[])
 		system("clear");
 		printf("Cleaning the output.");
 		system("make clean");
+		// Make this function better. Array? Foreach? 
 		if (NumberOfThreads == 1 || NumberOfThreads ==  3 || NumberOfThreads ==  5 || NumberOfThreads ==  NumberOfThreads ==  7 || NumberOfThreads ==  9 || NumberOfThreads ==  11 || NumberOfThreads ==  13 || NumberOfThreads ==  15 || NumberOfThreads ==  17 || NumberOfThreads ==  19 || NumberOfThreads ==  21 || NumberOfThreads ==  23 || NumberOfThreads ==  25 || NumberOfThreads ==  27 || NumberOfThreads ==  29 || NumberOfThreads ==  31 || NumberOfThreads ==  33 || NumberOfThreads ==  35 || NumberOfThreads ==  37 || NumberOfThreads ==  39 || NumberOfThreads ==  41 || NumberOfThreads ==  43 || NumberOfThreads ==  45 || NumberOfThreads ==  47 || NumberOfThreads ==  49 || NumberOfThreads ==  51 || NumberOfThreads ==  53 || NumberOfThreads ==  55 || NumberOfThreads ==  57 || NumberOfThreads ==  59 || NumberOfThreads ==  61 || NumberOfThreads ==  63 || NumberOfThreads ==  65 || NumberOfThreads == 67 || NumberOfThreads ==  69) {
 			NumberOfThreads = NumberOfThreads + 1;
 		}
@@ -217,7 +221,7 @@ int main(int argc, char *argv[])
 		printf("All done. Reboot and enjoy.");
 	}
 
-
+	// This section needs a lot of work. All kernel parameters must be exposed and usable.
 	if (CheckInput = 4) {
 		printf("Expert mode is disabled in this release.");
 	// printf("Cleaning the output.");
