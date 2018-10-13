@@ -46,36 +46,24 @@ void GetDepends()
 
 void Basic()
 {
-	if (NumberOfThreads == 1 || NumberOfThreads == 3 || NumberOfThreads == 5 || NumberOfThreads == NumberOfThreads == 7 || NumberOfThreads == 9 || NumberOfThreads == 11 || NumberOfThreads == 13 || NumberOfThreads == 15 || NumberOfThreads == 17 || NumberOfThreads == 19 || NumberOfThreads == 21 || NumberOfThreads == 23 || NumberOfThreads == 25 || NumberOfThreads == 27 || NumberOfThreads == 29 || NumberOfThreads == 31 || NumberOfThreads == 33 || NumberOfThreads == 35 || NumberOfThreads == 37 || NumberOfThreads == 39 || NumberOfThreads == 41 || NumberOfThreads == 43 || NumberOfThreads == 45 || NumberOfThreads == 47 || NumberOfThreads == 49 || NumberOfThreads == 51 || NumberOfThreads == 53 || NumberOfThreads == 55 || NumberOfThreads == 57 || NumberOfThreads == 59 || NumberOfThreads == 61 || NumberOfThreads == 63 || NumberOfThreads == 65 || NumberOfThreads == 67 || NumberOfThreads == 69) {
-		NumberOfThreads = NumberOfThreads + 1;
-	}
-	NumberOfThreads = NumberOfThreads / 2;
-	system("clear");
-	printf("Cleaning the output.");
 	system("make clean");
-	(BasicMakeModulesInstall += NumberOfThreads);
-	(BasicMakeInstall += NumberOfThreads);
-	system("clear");
-	printf("Making the modules for installation.");
-	sleep(3);
-	system(BasicMakeModulesInstall);
-	system("clear");
-	printf("Making and installing the kernel.");
-	sleep(3);
-	system(BasicMakeInstall);
+	system("make -j 4");
+	system("make modules -j 4");
+	system("make modules install -j 4");
+	printf("Making and installing the kernel.\n");
+	system("make install -j 4");
 	printf("All done. Reboot and enjoy.");
 }
 
 void LowPerf()
 {
-	system("clear");
 	printf("Cleaning the output.");
 	system("make clean");
-	system("clear");
-	printf("Making the modules for installation.");
-	system(BasicMakeModulesInstall);
-	printf("Making and installing the kernel.");
-	system(BasicMakeInstall);
+	system("make -j 1");
+	system("make modules -j 1");
+	system("make modules install -j 1");
+	printf("Making and installing the kernel.\n");
+	system("make install -j 1");
 	printf("All done. Reboot and enjoy.");
 }
 
@@ -83,31 +71,30 @@ void HighPerf()
 {
 	printf("Cleaning the output.\n");
 	system("make clean");
-	(BasicMakeModulesInstall += NumberOfThreads);
-	system("clear");
-	(BasicMakeInstall += NumberOfThreads);
-	system("clear");
-	printf("Making the modules for installation.\n");
-	system(BasicMakeModulesInstall);
+	system("make -j `getconf _NPROCESSORS_ONLN`");
+	system("make modules -j `getconf _NPROCESSORS_ONLN`");
+	system("make modules install -j `getconf _NPROCESSORS_ONLN`");
 	printf("Making and installing the kernel.\n");
-	system(BasicMakeInstall);
+	system("make install -j `getconf _NPROCESSORS_ONLN`");
 	printf("All done. Reboot and enjoy.\n");
 }
 
 void Expert()
 {
-	printf("Expert mode is disabled in this release.");
-	printf("Cleaning the output.");
-	system("make clean");
-	(BasicMakeModulesInstall += NumberOfThreads);
-	system("clear");
-	(BasicMakeInstall += NumberOfThreads);
-	system("clear");
-	printf("Making the modules for installation.");
-	system(BasicMakeModulesInstall);
-	printf("Making and installing the kernel.");
-	system(BasicMakeInstall);
-	printf("All done. Reboot and enjoy.");
+	printf("Expert mode is disabled in this release.\n");
+	sleep(3);
+	// printf("Cleaning the output.\n");
+	// system("make clean");
+	// system("make modules -j _NPROCESSORS_ONLN");
+	// system("clear");
+	// (BasicMakeInstall += NumberOfThreads);
+	// system("clear");
+	// printf("Making the modules for installation.");
+	// system(BasicMakeModulesInstall);
+	// printf("Making and installing the kernel.");
+	// system(BasicMakeInstall);
+	// printf("All done. Reboot and enjoy.");
+	// printf("Expert was called.");
 }
 
 
@@ -159,12 +146,12 @@ int main()
 		printf("Gathering dependencies.\n");
 		sleep(1);
 		GetDepends();
-		printf("Starting build.");
+		printf("Starting build.\n");
 		sleep(1);
 		// Check if the main config file is there
 		if (access(".config", F_OK) != -1) {
 			printf("Config found.\n");
-			Basic();
+			Expert();
 		}
 		else {
 			printf("Config not found. Generating.\n");
@@ -187,12 +174,12 @@ int main()
 			printf("Gathering dependencies.\n");
 			sleep(1);
 			GetDepends();
-			printf("Starting build.");
+			printf("Starting build.\n");
 			sleep(1);
 			// Check if the main config file is there
 			if (access(".config", F_OK) != -1) {
 				printf("Config found.\n");
-				LowPerf();
+				HighPerf();
 			}
 			else {
 				printf("Config not found. Generating.\n");
@@ -215,12 +202,12 @@ int main()
 				printf("Gathering dependencies.\n");
 				sleep(1);
 				GetDepends();
-				printf("Starting build.");
+				printf("Starting build.\n");
 				sleep(1);
 				// Check if the main config file is there
 				if (access(".config", F_OK) != -1) {
 					printf("Config found.\n");
-					HighPerf();
+					LowPerf();
 				}
 				else {
 					printf("Config not found. Generating.\n");
@@ -243,12 +230,12 @@ int main()
 					printf("Gathering dependencies.\n");
 					sleep(1);
 					GetDepends();
-					printf("Starting build.");
+					printf("Starting build.\n");
 					sleep(1);
 					// Check if the main config file is there
 					if (access(".config", F_OK) != -1) {
 						printf("Config found.\n");
-						Expert();
+						Basic();
 					}
 					else {
 						printf("Config not found. Generating.\n");
@@ -282,4 +269,6 @@ int main()
 	std::cin.ignore();
 	return 0;
 }
+
+
 
