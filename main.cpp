@@ -15,27 +15,31 @@
 #include <array>
 #include <condition_variable>
 
-constexpr auto BUFSIZE = 128;
 
 int KernelDirectorySpookiness = 0;
-int NumberOfThreads = 0;
-int CheckInput = -99;
-int SkipMode = 0;
-// const char *Mode = "Nothing";
-const char *CMLArguments = NULL;
-const char *BasicMake = "sudo make -j";
-const char *BasicMakeInstall = "sudo make install -j";
-const char *BasicMakeModulesInstall = "sudo make modules_install -j";
-const char *BasicMakeModules = "sudo make modules -j";
-const char *LowPerfMake = "sudo make";
-const char *LowPerfMakeInstall = "sudo make install";
-const char *LowPerfMakeModulesInstall = "sudo make modules_install";
-const char *LowPerfMakeModules = "sudo make modules";
-const char *HighPerfMake = "sudo make -j";
-const char *HighPerfMakeInstall = "sudo make install -j";
-const char *HighPerfMakeModulesInstall = "sudo make modules_install -j";
-const char *HighPerfMakeModules = "sudo make modules -j";
-char *SystemCommand = NULL;
+
+
+void Check()
+{
+	if (access(".config", F_OK) != -1) {
+		printf("Config found.\n");
+
+	}
+	else {
+		printf("Config not found. Generating.\n");
+		system("cp /boot/config-`uname -r` .config");
+		if (access(".config", F_OK) != -1) {
+			printf("Config found.\n");
+		}
+		else {
+			system("clear");
+			printf("Config file could not be pulled from your current kernel config. Please make it yourself by running 'make menuconfig'.\n");
+			printf("Press enter to exit.");
+			std::cin.ignore();
+			exit(1);
+		}
+	}
+}
 
 
 void GetDepends()
@@ -46,6 +50,7 @@ void GetDepends()
 
 void Basic()
 {
+	Check();
 	system("make clean");
 	system("make -j 4");
 	system("make modules -j 4");
@@ -53,10 +58,12 @@ void Basic()
 	printf("Making and installing the kernel.\n");
 	system("make install -j 4");
 	printf("All done. Reboot and enjoy.\n");
+	exit(0);
 }
 
 void LowPerf()
 {
+	Check();
 	printf("Cleaning the output.");
 	system("make clean");
 	system("make -j 1");
@@ -65,10 +72,12 @@ void LowPerf()
 	printf("Making and installing the kernel.\n");
 	system("make install -j 1");
 	printf("All done. Reboot and enjoy.\n");
+	exit(0);
 }
 
 void HighPerf()
 {
+	Check();
 	printf("Cleaning the output.\n");
 	system("make clean");
 	system("make -j `getconf _NPROCESSORS_ONLN`");
@@ -77,10 +86,12 @@ void HighPerf()
 	printf("Making and installing the kernel.\n");
 	system("make install -j `getconf _NPROCESSORS_ONLN`");
 	printf("All done. Reboot and enjoy.\n");
+	exit(0);
 }
 
 void Expert()
 {
+	Check();
 	system("clear");
 	printf("Expert mode is disabled in this release.\n");
 	sleep(3);
@@ -95,7 +106,7 @@ void Expert()
 	// printf("Making and installing the kernel.");
 	// system(BasicMakeInstall);
 	// printf("All done. Reboot and enjoy.");
-	// printf("Expert was called.");
+	exit(1);
 }
 
 
@@ -126,7 +137,6 @@ int main()
 	}
 	else {
 		printf("This doesn't seem to be a directory containing a kernel. Place this in a kernel directory.\n");
-		printf("%d", KernelDirectorySpookiness);
 		printf("Press enter to exit.");
 		std::cin.ignore();
 		return 0;
@@ -134,13 +144,12 @@ int main()
 
 	// Select kernel mode
 	printf("Select mode:\n");
-	printf("1. UNUSED LOW PERF\n");
+	printf("1. Basic\n");
 	printf("2. Low performance\n");
 	printf("3. High performance\n");
 	printf("4. Expert\n");
 	char Mode[50];
 	fgets(Mode, sizeof Mode, stdin);
-	NumberOfThreads = sysconf(_SC_NPROCESSORS_ONLN);
 	std::system("clear");
 	if (strcmp(Mode, "4\n") == 0) {
 		system("clear");
@@ -149,120 +158,42 @@ int main()
 		GetDepends();
 		printf("Starting build.\n");
 		sleep(1);
-		// Check if the main config file is there
-		if (access(".config", F_OK) != -1) {
-			printf("Config found.\n");
-			Expert();
-		}
-		else {
-			printf("Config not found. Generating.\n");
-			system("cp /boot/config-`uname -r` .config");
-			if (access(".config", F_OK) != -1) {
-				printf("Config found.\n");
-			}
-			else {
-				system("clear");
-				printf("Config file could not be pulled from your current kernel config. Please make it yourself by running 'make menuconfig'.\n");
-				printf("Press enter to exit.");
-				std::cin.ignore();
-				return 0;
-			}
-		}
+		Expert();
 	}
-	else {
-		if (strcmp(Mode, "3\n") == 0) {
-			system("clear");
-			printf("Gathering dependencies.\n");
-			sleep(1);
-			GetDepends();
-			printf("Starting build.\n");
-			sleep(1);
-			// Check if the main config file is there
-			if (access(".config", F_OK) != -1) {
-				printf("Config found.\n");
-				HighPerf();
-			}
-			else {
-				printf("Config not found. Generating.\n");
-				system("cp /boot/config-`uname -r` .config");
-				if (access(".config", F_OK) != -1) {
-					printf("Config found.\n");
-				}
-				else {
-					system("clear");
-					printf("Config file could not be pulled from your current kernel config. Please make it yourself by running 'make menuconfig'.\n");
-					printf("Press enter to exit.");
-					std::cin.ignore();
-					return 0;
-				}
-			}
-		}
-		else {
-			if (strcmp(Mode, "2\n") == 0) {
-				system("clear");
-				printf("Gathering dependencies.\n");
-				sleep(1);
-				GetDepends();
-				printf("Starting build.\n");
-				sleep(1);
-				// Check if the main config file is there
-				if (access(".config", F_OK) != -1) {
-					printf("Config found.\n");
-					LowPerf();
-				}
-				else {
-					printf("Config not found. Generating.\n");
-					system("cp /boot/config-`uname -r` .config");
-					if (access(".config", F_OK) != -1) {
-						printf("Config found.\n");
-					}
-					else {
-						system("clear");
-						printf("Config file could not be pulled from your current kernel config. Please make it yourself by running 'make menuconfig'.\n");
-						printf("Press enter to exit.");
-						std::cin.ignore();
-						return 0;
-					}
-				}
-			}
-			else {
-				if (strcmp(Mode, "1\n") == 0) {
-					system("clear");
-					printf("Gathering dependencies.\n");
-					sleep(1);
-					GetDepends();
-					printf("Starting build.\n");
-					sleep(1);
-					// Check if the main config file is there
-					if (access(".config", F_OK) != -1) {
-						printf("Config found.\n");
-						Basic();
-					}
-					else {
-						printf("Config not found. Generating.\n");
-						system("cp /boot/config-`uname -r` .config");
-						if (access(".config", F_OK) != -1) {
-							printf("Config found.\n");
-						}
-						else {
-							system("clear");
-							printf("Config file could not be pulled from your current kernel config. Please make it yourself by running 'make menuconfig'.\n");
-							printf("Press enter to exit.");
-							std::cin.ignore();
-							return 0;
-						}
-					}
-				}
-				else {
-					system("clear");
-					printf("Invalid selection. Only use 1, 2, 3, or 4.\n");
-					printf("Press enter to exit.\n");
-					std::cin.ignore();
-					return 0;
-				}
-			}
-		}
+	if (strcmp(Mode, "3\n") == 0) {
+		system("clear");
+		printf("Gathering dependencies.\n");
+		sleep(1);
+		GetDepends();
+		printf("Starting build.\n");
+		sleep(1);
+		HighPerf();
 	}
+	if (strcmp(Mode, "2\n") == 0) {
+		system("clear");
+		printf("Gathering dependencies.\n");
+		sleep(1);
+		GetDepends();
+		printf("Starting build.\n");
+		sleep(1);
+		LowPerf();
+	}
+		
+	if (strcmp(Mode, "1\n") == 0) {
+		system("clear");
+		printf("Gathering dependencies.\n");
+		sleep(1);
+		GetDepends();
+		printf("Starting build.\n");
+		sleep(1);
+		Basic();
+	}
+
+	system("clear");
+	printf("Invalid selection. Only use 1, 2, 3, or 4.\n");
+	printf("Press enter to exit.\n");
+	std::cin.ignore();
+	return 0;
 
 
 	//End of file. If everything goes well, return 0.
@@ -270,5 +201,4 @@ int main()
 	std::cin.ignore();
 	return 0;
 }
-
 
