@@ -9,7 +9,7 @@ Place the compiled output file in the root directory of the kernel you wish you 
 
 Open terminal, and do `chmod +x`
 
-Run the program with ./{name}
+Run the program with `./{name}`
 
 Choose your mode. 
 
