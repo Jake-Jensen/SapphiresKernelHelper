@@ -52,7 +52,7 @@ void Basic()
 	system("make modules install -j 4");
 	printf("Making and installing the kernel.\n");
 	system("make install -j 4");
-	printf("All done. Reboot and enjoy.");
+	printf("All done. Reboot and enjoy.\n");
 }
 
 void LowPerf()
@@ -64,7 +64,7 @@ void LowPerf()
 	system("make modules install -j 1");
 	printf("Making and installing the kernel.\n");
 	system("make install -j 1");
-	printf("All done. Reboot and enjoy.");
+	printf("All done. Reboot and enjoy.\n");
 }
 
 void HighPerf()
@@ -81,6 +81,7 @@ void HighPerf()
 
 void Expert()
 {
+	system("clear");
 	printf("Expert mode is disabled in this release.\n");
 	sleep(3);
 	// printf("Cleaning the output.\n");
@@ -269,6 +270,5 @@ int main()
 	std::cin.ignore();
 	return 0;
 }
-
 
 
