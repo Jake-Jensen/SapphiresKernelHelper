@@ -74,24 +74,22 @@ int main()
 	fgets(Mode, sizeof Mode, stdin);
 	NumberOfThreads = sysconf(_SC_NPROCESSORS_ONLN);
 	std::system("clear");
-	// Workaround for mode selection failure
-	// ! Does not appear to be working
-	if (strcmp(Mode, "4")) {
+	if (strcmp(Mode, "4\n") == 0) {
 		(CheckInput = 4);
 		printf("Expert\n");
 	}
 	else {
-		if (strcmp(Mode, "3")) {
+		if (strcmp(Mode, "3\n") == 0) {
 			CheckInput = 3;
 			printf("High perf\n");
 		}
 		else {
-			if (strcmp(Mode, "2")) {
+			if (strcmp(Mode, "2\n") == 0) {
 				CheckInput = 2;
 				printf("Low perf\n");
 			}
 			else {
-				if (strcmp(Mode, "1")) {
+				if (strcmp(Mode, "1\n") == 0) {
 					CheckInput = 1;
 					printf("Basic\n");
 				}
