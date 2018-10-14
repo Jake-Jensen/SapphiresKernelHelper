@@ -17,6 +17,7 @@
 
 
 int KernelDirectorySpookiness = 0;
+int SkipCheck = 0;
 
 
 void Check()
@@ -50,41 +51,180 @@ void GetDepends()
 
 void Basic()
 {
-	Check();
+	if (SkipCheck = 0) {
+		Check();
+	}
+	else {
+
+	}
 	system("make clean");
-	system("make -j 4");
-	system("make modules -j 4");
-	system("make modules install -j 4");
-	printf("Making and installing the kernel.\n");
-	system("make install -j 4");
+	int ret = system("make clean");
+	if (WEXITSTATUS(ret) == 0x10) {
+		int ret = system("make -j 4");
+		if (WEXITSTATUS(ret) == 0x10) {
+			int ret = system("make modules -j 4");
+			if (WEXITSTATUS(ret) == 0x10) {
+				int ret = system("make modules install -j 4");
+				if (WEXITSTATUS(ret) == 0x10) {
+					int ret = system("make install -j 4");
+					if (WEXITSTATUS(ret) == 0x10) {
+					}
+					else {
+						printf("Failed to install the kernel.\n");
+						printf("Press enter to exit.");
+						std::cin.ignore();
+						exit(1);
+					}
+				}
+				else {
+					printf("Failed to install modules.\n");
+					printf("Press enter to exit.");
+					std::cin.ignore();
+					exit(1);
+				}
+			}
+			else {
+				printf("Failed to make modules.\n");
+				printf("Press enter to exit.");
+				std::cin.ignore();
+				exit(1);
+			}
+		}
+		else {
+			printf("Failed to make.\n");
+			printf("Press enter to exit.");
+			std::cin.ignore();
+			exit(1);
+		}
+	}
+	else {
+		printf("Failed to clean the output.\n");
+		printf("Press enter to exit.");
+		std::cin.ignore();
+		exit(1);
+	}
+
 	printf("All done. Reboot and enjoy.\n");
 	exit(0);
 }
 
 void LowPerf()
 {
-	Check();
-	printf("Cleaning the output.");
+
+	if (SkipCheck = 0) {
+		Check();
+	}
+	else {
+
+	}
 	system("make clean");
-	system("make -j 1");
-	system("make modules -j 1");
-	system("make modules install -j 1");
-	printf("Making and installing the kernel.\n");
-	system("make install -j 1");
+	int ret = system("make clean");
+	if (WEXITSTATUS(ret) == 0x10) {
+		int ret = system("make -j 1");
+		if (WEXITSTATUS(ret) == 0x10) {
+			int ret = system("make modules -j 1");
+			if (WEXITSTATUS(ret) == 0x10) {
+				int ret = system("make modules install -j 1");
+				if (WEXITSTATUS(ret) == 0x10) {
+					int ret = system("make install -j 1");
+					if (WEXITSTATUS(ret) == 0x10) {
+					}
+					else {
+						printf("Failed to install the kernel.\n");
+						printf("Press enter to exit.");
+						std::cin.ignore();
+						exit(1);
+					}
+				}
+				else {
+					printf("Failed to install modules.\n");
+					printf("Press enter to exit.");
+					std::cin.ignore();
+					exit(1);
+				}
+			}
+			else {
+				printf("Failed to make modules.\n");
+				printf("Press enter to exit.");
+				std::cin.ignore();
+				exit(1);
+			}
+		}
+		else {
+			printf("Failed to make.\n");
+			printf("Press enter to exit.");
+			std::cin.ignore();
+			exit(1);
+		}
+	}
+	else {
+		printf("Failed to clean the output.\n");
+		printf("Press enter to exit.");
+		std::cin.ignore();
+		exit(1);
+	}
+
 	printf("All done. Reboot and enjoy.\n");
 	exit(0);
+
 }
 
 void HighPerf()
 {
-	Check();
-	printf("Cleaning the output.\n");
+
+	if (SkipCheck = 0) {
+		Check();
+	}
+	else {
+
+	}
 	system("make clean");
-	system("make -j `getconf _NPROCESSORS_ONLN`");
-	system("make modules -j `getconf _NPROCESSORS_ONLN`");
-	system("make modules install -j `getconf _NPROCESSORS_ONLN`");
-	printf("Making and installing the kernel.\n");
-	system("make install -j `getconf _NPROCESSORS_ONLN`");
+	int ret = system("make clean");
+	if (WEXITSTATUS(ret) == 0x10) {
+		int ret = system("make -j `getconf _NPROCESSORS_ONLN`");
+		if (WEXITSTATUS(ret) == 0x10) {
+			int ret = system("make modules -j `getconf _NPROCESSORS_ONLN`");
+			if (WEXITSTATUS(ret) == 0x10) {
+				int ret = system("make modules install -j `getconf _NPROCESSORS_ONLN`");
+				if (WEXITSTATUS(ret) == 0x10) {
+					int ret = system("make install -j `getconf _NPROCESSORS_ONLN`");
+					if (WEXITSTATUS(ret) == 0x10) {
+					}
+					else {
+						printf("Failed to install the kernel.\n");
+						printf("Press enter to exit.");
+						std::cin.ignore();
+						exit(1);
+					}
+				}
+				else {
+					printf("Failed to install modules.\n");
+					printf("Press enter to exit.");
+					std::cin.ignore();
+					exit(1);
+				}
+			}
+			else {
+				printf("Failed to make modules.\n");
+				printf("Press enter to exit.");
+				std::cin.ignore();
+				exit(1);
+			}
+		}
+		else {
+			printf("Failed to make.\n");
+			printf("Press enter to exit.");
+			std::cin.ignore();
+			exit(1);
+		}
+	}
+	else {
+		printf("Failed to clean the output.\n");
+		printf("Press enter to exit.");
+		std::cin.ignore();
+		exit(1);
+	}
+
 	printf("All done. Reboot and enjoy.\n");
 	exit(0);
 }
@@ -113,7 +253,8 @@ void Expert()
 int main()
 {
 	// Debug flags
-	// KernelDirectorySpookiness = 99;
+	KernelDirectorySpookiness = 0;
+	SkipCheck = 0;
 
 	// Main annoucement
 	printf("Sapphire's Kernel Installer!\n");
@@ -201,4 +342,5 @@ int main()
 	std::cin.ignore();
 	return 0;
 }
+
 
