@@ -25,4 +25,5 @@ Distribution: Build kernel into an installable .deb file, as well as specify the
 
 # Notes
 Expert mode is currently disabled until it's functionality is added.
+
 Distribution naming is currently disabled until it's functionality is added.
