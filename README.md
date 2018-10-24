@@ -21,5 +21,8 @@ High perf: All thread usage. Hardest hit to system resources.
 
 Expert: Configure the compilation exactly how you want it. Specify job threads, ignore error, etc. 
 
+Distribution: Build kernel into an installable .deb file, as well as specify the custom name, and other variables. 
+
 # Notes
 Expert mode is currently disabled until it's functionality is added.
+Distribution naming is currently disabled until it's functionality is added.
